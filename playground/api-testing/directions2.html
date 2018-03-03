@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Get Directions to Officient</title>
+  <link rel="stylesheet" href="./directions.css">
+</head>
+<body>
+  <div id="floating-panel">
+    <b>Start: </b>
+    <select id="start">
+      <option value="hasselt, belgium">Hasselt</option>
+    </select>
+    <b>End: </b>
+    <select id="end">
+      <option value="gent, belgium">Gent</option>
+    </select>
+    </div>
+    <div id="map"></div>
+    <!-- Replace the value of the key parameter with your own API key. -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9y3WJPhAseaEGtV28qlG9Z9mwAKfvLy8&callback=initMap">
+    </script>
+</body>
+</html>
+
+<script>
+function initMap() {
+  var directionsService = new google.maps.DirectionsService;
+  var directionsDisplay = new google.maps.DirectionsRenderer;
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 9,
+    center: {lat: 50.9277246, lng: 5.323142}
+  });
+  directionsDisplay.setMap(map);
+  calculateAndDisplayRoute(directionsService, directionsDisplay);
+}
+
+function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+  directionsService.route({
+    origin: {lat: 50.927725, lng: 5.323142}, // Hasselt
+    destination: {lat: 51.039718, lng: 3.716947}, // Officient
+    travelMode: 'TRANSIT',
+    transitOptions: {
+      arrivalTime: new Date(),
+    }
+  }, function(response, status) {
+    if (status === 'OK') {
+      directionsDisplay.setDirections(response);
+    } else {
+      window.alert('Directions request failed due to ' + status);
+    }
+  });
+}
+</script>

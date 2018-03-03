@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Get Directions to Officient</title>
+  <link rel="stylesheet" href="./directions.css">
+</head>
+<body>
+  <div id="panel">
+      <b>Van: </b>
+      <span id="from">Acaciastraat 82, 3500 Hasselt</span>
+      <b>Naar: </b>
+      <span id="to">Kortrijksesteenweg 181, 9000 Gent</span>
+      </div>
+      <div id="map"></div>
+      <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9y3WJPhAseaEGtV28qlG9Z9mwAKfvLy8&callback=initMap">
+      </script>
+</body>
+</html>
+
+<script>
+function initMap() {
+  var directionsService = new google.maps.DirectionsService
+  var directionsDisplay = new google.maps.DirectionsRenderer
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 11,
+    center: {lat: 50.9277246, lng: 5.323142}
+  })
+  directionsDisplay.setMap(map)
+
+  function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+    directionsService.route({
+      origin: document.getElementById('from').value,
+      destination: document.getElementById('to').value,
+      travelMode: 'TRANSIT'
+    }, (response, status) => {
+      if (status === 'OK') {
+        directionsDisplay.setDirections(response)
+      } else {
+        window.alert('Request failed due to ' + status)
+      }
+    });
+  }
+}
+</script>
