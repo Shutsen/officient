@@ -20,6 +20,7 @@
 </template>
 
 <script>
+// TODO 1: Make things pretty?
 // import axios from 'axios'
 export default {
   name: 'ListPeople',

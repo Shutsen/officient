@@ -9,6 +9,7 @@
 </template>
 
 <script>
+// TODO 1: Make things pretty?
 export default {
   name: 'WelcomeHome',
   data () {

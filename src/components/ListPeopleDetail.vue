@@ -16,14 +16,15 @@
       </div>
     </div>
     <time-engagement :id="this.id"></time-engagement>
-    <google-map name="directions" :departure="departure"></google-map>
+    <get-directions name="directions" :departure="departure"></get-directions>
   </div>
 </template>
 
 <script>
+// TODO 1: Make things pretty?
 // import axios from 'axios'
 import TimeEngagement from './TimeEngagement'
-import GoogleMap from './GoogleMap'
+import GetDirections from './GetDirections'
 export default {
   name: 'ListPeopleDetail',
   props: {
@@ -33,7 +34,7 @@ export default {
     }
   },
   components: {
-    GoogleMap,
+    GetDirections,
     TimeEngagement
   },
   data () {

@@ -15,6 +15,7 @@
 <script>
 
 export default {
+  // TODO 1: Make things pretty?
   name: 'google-map',
   props: ['name', 'departure'],
   data () {
@@ -24,6 +25,8 @@ export default {
     }
   },
   mounted () {
+    // TODO 2: add select functionality to either go to Work or to return Home
+    // TODO 3: change departureTime to arrivalTime for each day of the week
     const calculateAndDisplayRoute = (directionsService, directionsDisplay) => {
       let travelMode = document.getElementById('travelMode').value
       directionsService.route({

@@ -21,6 +21,8 @@
 </template>
 
 <script>
+// TODO 1: Check for further improvements
+// TODO 2: Make things pretty?
 export default {
   props: {
     id: {
