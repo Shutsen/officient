@@ -1,6 +1,7 @@
 <template>
   <div>
     <h3>Daily time engagement (hrs)</h3>
+    <p>{{wageDetails.start_date}}</p>
     <table>
       <tr>
         <th>Monday</th>
@@ -34,8 +35,10 @@ export default {
       wageDetails: {}
     }
   },
-  mounted () {
+  created () {
+    // eslint-disable-next-line
     const getWageDetails = async (id) => {
+      // const token = 'bd6ad762f364ef73642631ee5224859372a6e8f7'
       // const response = await axios.get(`https://api.officient.io/1.0/wages/${id}/current`, {headers: {'Authorization': `Bearer ${token}`}})
       const postmanResponse = {
         'data': {

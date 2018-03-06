@@ -1,38 +1,65 @@
 <template>
   <div>
     <h3>Transit Travel Time</h3>
-    <p class="directions"><strong>From: </strong><span id="start">{{departure}}</span></p>
-    <p class="directions"><strong>To: </strong><span id="end">{{destination}}</span></p>
-    <select id="travelMode">
+    Please select your destination:
+    <select v-model="travelTo" id="get-destination">
+      <option value="WORK">WORK</option>
+      <option value="HOME">HOME</option>
+    </select>
+    Please select your travel mode:
+    <select v-model="travelMode" id="travel-mode">
       <option value="TRANSIT">TRANSIT</option>
       <option value="DRIVING">DRIVING</option>
     </select>
     <br>
+    <p><strong>You chose to travel to {{travelTo | lowercase}} by {{travelMode | lowercase}}</strong> <br><span class="small">(From: {{getTravelDirection.from}}, To: {{getTravelDirection.to}})</span></p>
     <div class="google-map" :id="mapName"></div>
     <div id="right-panel"><h4>Details</h4></div>
   </div>
 </template>
-<script>
 
+<script>
 export default {
   // TODO 1: Make things pretty?
   name: 'google-map',
-  props: ['name', 'departure'],
+  props: ['name', 'homeAddress'],
   data () {
     return {
       mapName: this.name + '-map',
-      destination: 'Kortrijksesteenweg 181, 9000 Gent'
+      workAddress: 'Kortrijksesteenweg 181, 9000 Gent',
+      travelTo: 'WORK',
+      travelMode: 'TRANSIT'
+    }
+  },
+  computed: {
+    getTravelDirection () {
+      if (this.travelTo === 'WORK') {
+        return {
+          from: this.homeAddress,
+          to: this.workAddress
+        }
+      } else if (this.travelTo === 'HOME') {
+        return {
+          from: this.workAddress,
+          to: this.homeAddress
+        }
+      }
+    }
+  },
+  filters: {
+    lowercase (value) {
+      if (!value) return ''
+      return value.toLowerCase()
     }
   },
   mounted () {
     // TODO 2: add select functionality to either go to Work or to return Home
     // TODO 3: change departureTime to arrivalTime for each day of the week
     const calculateAndDisplayRoute = (directionsService, directionsDisplay) => {
-      let travelMode = document.getElementById('travelMode').value
       directionsService.route({
-        origin: this.departure,
-        destination: this.destination,
-        travelMode: travelMode,
+        origin: this.getTravelDirection.from,
+        destination: this.getTravelDirection.to,
+        travelMode: this.travelMode,
         provideRouteAlternatives: true,
         transitOptions: {
           departureTime: new Date(),
@@ -66,7 +93,8 @@ export default {
       let onChangeHandler = () => {
         calculateAndDisplayRoute(directionsService, directionsDisplay)
       }
-      document.getElementById('travelMode').addEventListener('change', onChangeHandler)
+      document.getElementById('travel-mode').addEventListener('change', onChangeHandler)
+      document.getElementById('get-destination').addEventListener('change', onChangeHandler)
     }
     initMap()
   }
@@ -94,7 +122,7 @@ export default {
   overflow: scroll;
 }
 
-.directions {
-  margin: 5px 0
+.small {
+  font-size: 12px;
 }
 </style>

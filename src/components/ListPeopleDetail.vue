@@ -16,7 +16,7 @@
       </div>
     </div>
     <time-engagement :id="this.id"></time-engagement>
-    <get-directions name="directions" :departure="departure"></get-directions>
+    <get-directions name="directions" :homeAddress="homeAddress"></get-directions>
   </div>
 </template>
 
@@ -29,8 +29,7 @@ export default {
   name: 'ListPeopleDetail',
   props: {
     id: {
-      required: true,
-      type: String
+      required: true
     }
   },
   components: {
@@ -41,12 +40,11 @@ export default {
     return {
       loading: true,
       personAddress: '',
-      personDetails: {},
-      wageDetails: {}
+      personDetails: {}
     }
   },
   computed: {
-    departure () {
+    homeAddress () {
       return `${this.personDetails.address.line_1}, ${this.personDetails.address.zipcode} ${this.personDetails.address.city}`
     }
   },
