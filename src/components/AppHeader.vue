@@ -50,5 +50,8 @@ export default {
   ul li.active {
     background-color: white;
     color: black;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-weight: bold;
   }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="welcome-home padding">
     <div class="img">
-      <figure class="image is-200x200 animated-infinite pulse">
+      <figure class="image is-200x200 animated infinite pulse">
         <img src="../assets/officient.jpg">
       </figure>
     </div>
@@ -51,6 +51,11 @@ export default {
   .img {
     width: 200px;
     margin: 0 auto 40px;
+  }
+
+  .animated {
+    animation-duration: 1s;
+    animation-fill-mode: both;
   }
 
   .animated.infinite {
