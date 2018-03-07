@@ -1,30 +1,76 @@
 <template>
-  <div>
-    <img v-if="loading" src="https://i.imgur.com/JfPpwOA.gif">
-    <h2>Detailed page of the employee you are interested in will be displayed over here.</h2>
-    <div class="contain">
-      <div class="avatar">
-        <img :src="personDetails.avatar">
-      </div>
-      <div class="details">
-        <div class="name">{{personDetails.name}}</div>
-        <p>{{personDetails.email}}</p>
-        <p>{{personDetails.address.line_1}}</p>
-        <p>{{personDetails.address.zipcode}} {{personDetails.address.city}}</p>
-        <p>Current Role: {{personDetails.current_role.name}}</p>
-        <p>With us since: {{personDetails.current_role.start_date}}</p>
+  <div class="person-details">
+    <div class="container">
+      <p class="title is-3">Details Employee</p>
+      <div class="tile is-ancestor">
+        <div class="tile is-vertical is-8">
+          <div class="tile">
+            <div class="tile is-parent is-vertical has-text-left">
+              <article class="tile is-child notification">
+                <article class="media">
+                  <figure class="media-left">
+                    <p class="image is-64x64">
+                      <img :src="personDetails.avatar">
+                    </p>
+                  </figure>
+                  <div class="media-content">
+                    <div class="content">
+                      <p class="title is-5">{{personDetails.name}}</p>
+                      <p>Current Role: {{personDetails.current_role.name}}</p>
+                       <p>With us since: {{personDetails.current_role.start_date}}</p>
+                    </div>
+                  </div>
+                </article>
+              </article>
+              <article class="tile is-child notification has-text-left">
+                <p class="title is-5">Contact Information</p>
+                <p><span class="icon"><i class="fas fa-envelope"></i></span><a :href="`mailto:${personDetails.email}`">{{personDetails.email}}</a></p>
+                <p><span class="icon"><i class="fas fa-home"></i></span>{{personDetails.address.line_1 | lowercase}}</p>
+                <p><span class="icon"><i class="fas fa-info-circle"></i></span>{{personDetails.address.zipcode}} {{personDetails.address.city}}, Belgium</p>
+              </article>
+            </div>
+            <div class="tile is-parent has-text-left">
+              <article class="tile is-child notification">
+                <p class="title is-5">About</p>
+                <ul>
+                  <li><u>Born:</u> Yes. 09/08/1986 in Hasselt</li>
+                  <li><u>Education:</u> MBA in Entrepreneurship and Innovation. Selfstudy code</li>
+                  <li><u>Work:</u> Part-time Developer, part-time Assistant Manager at Lekker Limburgs</li>
+                  <li><u>Prefers:</u> A Full-time Developer job and to work in a team again</li>
+                  <li><u>Loves:</u> A challenge, boardgames, football, travel and sunflower seeds</li>
+                  <li><u>Keywords:</u> Teamplayer, self-motivated, enthusiastic, eager to learn</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+          <div class="tile is-parent has-text-left">
+            <article class="tile is-child notification">
+              <list-skills></list-skills>
+            </article>
+          </div>
+        </div>
+        <div class="tile is-parent has-text-left">
+          <article class="tile is-child notification">
+            <div class="content">
+              <p class="title is-5">Daily Time Engagement</p>
+              <time-engagement :id="this.id"></time-engagement>
+            </div>
+          </article>
+        </div>
       </div>
     </div>
-    <time-engagement :id="this.id"></time-engagement>
     <get-directions name="directions" :homeAddress="homeAddress"></get-directions>
+    <distance-matrix :homeAddress="homeAddress"></distance-matrix>
   </div>
 </template>
 
 <script>
-// TODO 1: Make things pretty?
 // import axios from 'axios'
 import TimeEngagement from './TimeEngagement'
 import GetDirections from './GetDirections'
+import DistanceMatrix from './DistanceMatrix'
+import ListSkills from './ListSkills'
+import SubLevel from './SubLevel'
 export default {
   name: 'ListPeopleDetail',
   props: {
@@ -33,14 +79,22 @@ export default {
     }
   },
   components: {
+    TimeEngagement,
     GetDirections,
-    TimeEngagement
+    DistanceMatrix,
+    ListSkills,
+    SubLevel
   },
   data () {
     return {
-      loading: true,
       personAddress: '',
       personDetails: {}
+    }
+  },
+  filters: {
+    lowercase (value) {
+      if (!value) return ''
+      return value.toLowerCase()
     }
   },
   computed: {
@@ -98,7 +152,6 @@ export default {
           }
         }
         this.personDetails = postmanResponse.data
-        this.loading = false
       } catch (e) {
         console.log(e)
       }
@@ -109,7 +162,11 @@ export default {
 </script>
 
 <style scoped>
-  .avatar img {
-    border-radius: 50%;
+  .person-details {
+    margin-top: 40px;
+  }
+
+  span.icon {
+    margin-right: 5px;
   }
 </style>

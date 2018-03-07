@@ -1,13 +1,20 @@
 <template>
   <div id="app">
-    <img src="./assets/officient.jpg">
+    <app-header></app-header>
     <router-view/>
+    <app-footer></app-footer>
   </div>
 </template>
 
 <script>
+import AppFooter from './components/AppFooter'
+import AppHeader from './components/AppHeader'
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    AppFooter,
+    AppHeader
+  }
 }
 </script>
 
@@ -18,7 +25,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
 #app img {

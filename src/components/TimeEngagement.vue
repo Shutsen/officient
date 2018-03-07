@@ -1,29 +1,40 @@
 <template>
   <div>
-    <h3>Daily time engagement (hrs)</h3>
-    <p>{{wageDetails.start_date}}</p>
     <table>
-      <tr>
-        <th>Monday</th>
-        <th>Tuesday</th>
-        <th>Wednesday</th>
-        <th>Thursday</th>
-        <th>Friday</th>
-      </tr>
-      <tr>
-        <td>{{wageDetails.weekly_time_engagement_minutes.monday / 60}}</td>
-        <td>{{wageDetails.weekly_time_engagement_minutes.tuesday / 60}}</td>
-        <td>{{wageDetails.weekly_time_engagement_minutes.wednesday / 60}}</td>
-        <td>{{wageDetails.weekly_time_engagement_minutes.thursday / 60}}</td>
-        <td>{{wageDetails.weekly_time_engagement_minutes.friday / 60}}</td>
-      </tr>
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Hours</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Monday</td>
+          <td>{{wageDetails.weekly_time_engagement_minutes.monday / 60}} hours</td>
+        </tr>
+        <tr>
+          <td>Tuesday</td>
+          <td>{{wageDetails.weekly_time_engagement_minutes.tuesday / 60}} hours</td>
+        </tr>
+        <tr>
+          <td>Wednesday</td>
+          <td>{{wageDetails.weekly_time_engagement_minutes.wednesday / 60}} hours</td>
+        </tr>
+        <tr>
+          <td>Thursday</td>
+          <td>{{wageDetails.weekly_time_engagement_minutes.thursday / 60}} hours</td>
+        </tr>
+        <tr>
+          <td>Friday</td>
+          <td>{{wageDetails.weekly_time_engagement_minutes.friday / 60}} hours</td>
+        </tr>
+      </tbody>
     </table>
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. At non, architecto modi repudiandae, dolores quos omnis quaerat beatae</p>
   </div>
 </template>
 
 <script>
-// TODO 1: Check for further improvements
-// TODO 2: Make things pretty?
 export default {
   props: {
     id: {
@@ -81,18 +92,6 @@ export default {
 
 <style scoped>
   table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-  }
-
-  td, th {
-      border: 1px solid #dddddd;
-      text-align: center;
-      padding: 8px;
-  }
-
-  tr:nth-child(even) {
-      background-color: #dddddd;
+    color: black;
   }
 </style>
