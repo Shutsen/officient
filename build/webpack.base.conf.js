@@ -3,6 +3,7 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+const nodeExternals = require('webpack-node-externals')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -88,5 +89,12 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
-  }
+  },
+}
+
+if (process.env.NODE_ENV === 'test') {
+  // exclude NPM deps from test bundle
+  module.exports.externals = [require('webpack-node-externals')()]
+  // use inline source map so that it works with mocha-webpack
+  module.exports.devtool = 'inline-cheap-module-source-map'
 }
