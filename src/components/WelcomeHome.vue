@@ -5,13 +5,13 @@
         <img src="../assets/officient.jpg">
       </figure>
     </div>
-    <p class="title is-3">{{msg}}</p>
+    <p class="catch-line title is-3">{{msg}}</p>
     <div class="field">
       <div class="control">
         <input v-model="name" class="input is-primary is-rounded" type="text" placeholder="How may we call you?">
       </div>
     </div>
-    <p class="title is-5" v-if="name !== ''">Well, hello {{name}}! It's so nice to have you here!</p>
+    <p class="welcome-msg title is-5" v-if="name !== ''">Well, hello {{name}}! It's so nice to have you here!</p>
     <div class="container">
       <div class="tile is-ancestor">
         <div class="tile is-parent is-8">
@@ -23,7 +23,7 @@
         <div class="tile is-parent">
           <article class="tile is-child notification has-text-left">
               <p class="title is-4">Our awesome team</p>
-              <p>If you fancy, you can check out some of our employees here: <router-link :to="{name: 'ListPeople'}">List of people</router-link></p>
+              <p>If you fancy, you can check out some of our employees here: <span class="link" @click="navigate"><router-link :to="{name: 'ListPeople'}">List of people</router-link></span></p>
           </article>
         </div>
       </div>
@@ -38,6 +38,11 @@ export default {
     return {
       msg: 'Paperless, not peopleless.',
       name: ''
+    }
+  },
+  methods: {
+    navigate () {
+      Event.$emit('makeActive')
     }
   }
 }

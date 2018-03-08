@@ -37,6 +37,11 @@ export default {
     setActive (menuItem) {
       this.activeItem = menuItem
     }
+  },
+  created () {
+    Event.$on('makeActive', () => {
+      this.setActive('employees')
+    })
   }
 }
 </script>
