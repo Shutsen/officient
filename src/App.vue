@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import 'bulma/css/bulma.css'
+import 'bulma-tooltip/dist/bulma-tooltip.min.css'
 import AppFooter from './components/AppFooter'
 import AppHeader from './components/AppHeader'
 export default {

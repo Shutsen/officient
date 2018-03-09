@@ -18,6 +18,7 @@
       </div>
       <br>
       <p><strong>You chose to travel <span class="accent">to {{travelTo | lowercase}} by {{travelMode | lowercase}}</span></strong> <br><span class="small">(From: {{getTravelDirection.from}}, To: {{getTravelDirection.to}})</span></p>
+      <div class="container"><p class="notification is-warning">Showing suggested routes for today with arrival time set at 08:45.</p></div>
     </div>
     <div class="container">
       <div class="tile is-ancestor">
@@ -47,8 +48,7 @@ export default {
       mapName: this.name + '-map',
       workAddress: 'Kortrijksesteenweg 181, 9000 Gent',
       travelTo: 'WORK',
-      travelMode: 'TRANSIT',
-      workDays: ['Monday', 'Tuesday', 'WednesDay', 'Thursday', 'Friday']
+      travelMode: 'TRANSIT'
     }
   },
   computed: {
@@ -64,6 +64,13 @@ export default {
           to: this.homeAddress
         }
       }
+    },
+    arriveAt () {
+      // get day of the week with 1 being Monday and 7 being Sunday 
+      let day = moment().isoWeekday(moment().format('E'))
+      // format new Date string with the time being set on the current day, at 08:45 GMT+1 (or UTC = 07:45)
+      // 15 mins in advance, to make sure employees arrive on time
+      return new Date(moment.utc(day).set({'hour': 7, 'minute': 45}).format())
     }
   },
   filters: {
@@ -75,9 +82,6 @@ export default {
   mounted () {
     // TODO 1: add select functionality to either go to Work or to return Home
     // TODO 2: change departureTime to arrivalTime for each day of the week
-    // this.workDays.forEach((workDay) => {
-      let day = moment().isoWeekday('Monday')
-      let arriveAt = moment(day).set({'hour': 8, 'minute': 45})
       const calculateAndDisplayRoute = (directionsService, directionsDisplay) => {
         directionsService.route({
           origin: this.getTravelDirection.from,
@@ -85,7 +89,7 @@ export default {
           travelMode: this.travelMode,
           provideRouteAlternatives: true,
           transitOptions: {
-            arrivalTime: new Date('2018-03-07T06:45:30.911Z'),
+            arrivalTime: new Date(this.arriveAt),
             routingPreference: 'FEWER_TRANSFERS'
           }
         }, (response, status) => {
@@ -141,6 +145,11 @@ export default {
 .google-map {
   width: 100%;
   min-height: 400px;
+}
+
+.notification {
+  margin-top: 10px;
+  padding: 0.5em;
 }
 
 #right-panel {

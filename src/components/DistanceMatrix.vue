@@ -13,30 +13,30 @@
           <th>Total by week</th>
         </tr>
         <tr>
-          <td>To Work</td>
-          <td>{{toWork.text}}</td>
-          <td>{{toWork.text}}</td>
-          <td>{{toWork.text}}</td>
-          <td>{{toWork.text}}</td>
-          <td>{{toWork.text}}</td>
+          <td class="tooltip is-tooltip-primary is-tooltip-right" data-tooltip="Arriving at 08:45">To Work</td>
+          <td>{{dailyArrivals[0].text}}</td>
+          <td>{{dailyArrivals[1].text}}</td>
+          <td>{{dailyArrivals[2].text}}</td>
+          <td>{{dailyArrivals[3].text}}</td>
+          <td>{{dailyArrivals[4].text}}</td>
           <td><strong>{{totalPerWeekWork}}</strong></td>
         </tr>
         <tr>
-          <td>To Home</td>
-          <td>{{toHome.text}}</td>
-          <td>{{toHome.text}}</td>
-          <td>{{toHome.text}}</td>
-          <td>{{toHome.text}}</td>
-          <td>{{toHome.text}}</td>
+          <td class="tooltip is-tooltip-primary is-tooltip-right" data-tooltip="Leaving at 17:15">To Home</td>
+          <td>{{dailyDepartures[0].text}}</td>
+          <td>{{dailyDepartures[1].text}}</td>
+          <td>{{dailyDepartures[2].text}}</td>
+          <td>{{dailyDepartures[3].text}}</td>
+          <td>{{dailyDepartures[4].text}}</td>
           <td><strong>{{totalPerWeekHome}}</strong></td>
         </tr>
         <tr>
           <td><strong>Total by day</strong></td>
-          <td><strong>{{totalPerDay}}</strong></td>
-          <td><strong>{{totalPerDay}}</strong></td>
-          <td><strong>{{totalPerDay}}</strong></td>
-          <td><strong>{{totalPerDay}}</strong></td>
-          <td><strong>{{totalPerDay}}</strong></td>
+          <td><strong>{{totalPerDay[0]}}</strong></td>
+          <td><strong>{{totalPerDay[1]}}</strong></td>
+          <td><strong>{{totalPerDay[2]}}</strong></td>
+          <td><strong>{{totalPerDay[3]}}</strong></td>
+          <td><strong>{{totalPerDay[4]}}</strong></td>
           <td><strong>{{grandTotal}}</strong></td>
         </tr>
       </table>
@@ -46,129 +46,120 @@
 
 <script>
 /* eslint-disable */
+import moment from 'moment'
 export default {
   props: ['homeAddress'],
   data () {
     return {
-      toHome: {},
-      toWork: {}
+      workDays: ['Monday', 'Tuesday', 'WednesDay', 'Thursday', 'Friday'],
+      dailyArrivals: [],
+      dailyDepartures: []
     }
   },
   computed: {
-    totalPerDay () {
-      let totalMin = this.toHome.value + this.toWork.value
-      let hours = Math.floor( totalMin / 3600)          
-      let mins = Math.floor(totalMin % 3600 / 60)
-      return `${hours} hours ${mins} mins`
-    },
     totalPerWeekWork () {
-      let totalMin = this.toWork.value * 5
-      let hours = Math.floor( totalMin / 3600)        
-      let mins = Math.floor(totalMin % 3600 / 60)
-      return `${hours} hours ${mins} mins`
+      let total = 0
+      for (let i = 0; i < this.dailyArrivals.length; i++) {
+        total += this.dailyArrivals[i].value
+      }
+      let hours = Math.floor(total / 3600)        
+      let mins = Math.floor(total % 3600 / 60)
+      return `${hours} hours ${mins} mins` 
+      
     },
     totalPerWeekHome () {
-      let totalMin = this.toHome.value * 5
-      let hours = Math.floor( totalMin / 3600)          
-      let mins = Math.floor(totalMin % 3600 / 60)
-      return `${hours} hours ${mins} mins`
+      let total = 0
+      for (let i = 0; i < this.dailyDepartures.length; i++) {
+        total += this.dailyDepartures[i].value
+      }
+      let hours = Math.floor(total / 3600)        
+      let mins = Math.floor(total % 3600 / 60)
+      return `${hours} hours ${mins} mins` 
+    },
+    totalPerDay () {
+      let totalPerDay = []
+      for (let i = 0; i < this.dailyDepartures.length; i++) {
+        let total = this.dailyDepartures[i].value + this.dailyArrivals[i].value
+        let hours = Math.floor(total / 3600)        
+        let mins = Math.floor(total % 3600 / 60)
+        let output = `${hours} hours ${mins} mins` 
+        totalPerDay.push(output)
+      }
+      return totalPerDay
     },
     grandTotal () {
-      let totalMin = this.toWork.value * 5 + this.toWork.value * 5
-      let hours = Math.floor( totalMin / 3600)          
-      let mins = Math.floor(totalMin % 3600 / 60)
-      return `${hours} hours ${mins} mins`
+      let total = 0
+      for (let i = 0; i < this.dailyDepartures.length; i++) {
+        total += this.dailyDepartures[i].value + this.dailyArrivals[i].value
+      }
+      let hours = Math.floor(total / 3600)        
+      let mins = Math.floor(total % 3600 / 60)
+      return `${hours} hours ${mins} mins` 
     }
   },
   created () {
     const initializeMap = () => {
       let bounds = new google.maps.LatLngBounds
-      let markersArray = []
 
-      let origin1 = 'Acaciastraat 82, 3500 Hasselt'
+      let origin1 = this.homeAddress
       let origin2 = 'Kortrijksesteenweg 181, 9000 Gent'
       let destinationA = 'Kortrijksesteenweg 181, 9000 Gent'
-      let destinationB = 'Acaciastraat 82, 3500 Hasselt'
+      let destinationB = this.homeAddress
 
-      // let destinationIcon = 'https://chart.googleapis.com/chart?' +
-          // 'chst=d_map_pin_letter&chld=D|FF0000|000000'
-      // let originIcon = 'https://chart.googleapis.com/chart?' +
-          // 'chst=d_map_pin_letter&chld=O|FFFF00|000000'
-      // let map = new google.maps.Map(document.getElementById('distance-map'), {
-      //   center: {lat: 51.039718, lng: 3.716947},
-      //   zoom: 10
-      // })
-      // let geocoder = new google.maps.Geocoder
-
-      let service = new google.maps.DistanceMatrixService
-      service.getDistanceMatrix({
-        origins: [origin1, origin2],
-        destinations: [destinationA, destinationB],
-        travelMode: 'TRANSIT',
-        transitOptions: {
-          arrivalTime: new Date('2018-03-07T06:45:30.911Z'),
-          routingPreference: 'FEWER_TRANSFERS'
-        },
-        unitSystem: google.maps.UnitSystem.METRIC,
-        avoidHighways: false,
-        avoidTolls: false
-      }, (response, status) => {
-        if (status !== 'OK') {
-          alert('Error was: ' + status)
-        } else {
-          // console.log('this is the response:', response)
-          // let originList = response.originAddresses
-          // let destinationList = response.destinationAddresses
-          // let outputDiv = document.getElementById('output')
-          // outputDiv.innerHTML = ''
-          // deleteMarkers(markersArray)
-
-          // let showGeocodedAddressOnMap = (asDestination) => {
-          //   let icon = asDestination ? destinationIcon : originIcon
-          //   return (results, status) => {
-          //     if (status === 'OK') {
-          //       map.fitBounds(bounds.extend(results[0].geometry.location))
-          //       markersArray.push(new google.maps.Marker({
-          //         map: map,
-          //         position: results[0].geometry.location,
-          //         icon: icon
-          //       }))
-          //     } else {
-          //       alert('Geocode was not successful due to: ' + status)
-          //     }
-          //   }
-          // }
-          this.toHome = {
-            text: response.rows[0].elements[0].duration.text,
-            value: response.rows[0].elements[0].duration.value
+      this.workDays.forEach((workDay) => {
+        let day = moment().isoWeekday(workDay)
+        let arriveAt = new Date(moment.utc(day).set({'hour': 7, 'minute': 45}).format())
+        let service = new google.maps.DistanceMatrixService
+        service.getDistanceMatrix({
+          origins: [origin1, origin2],
+          destinations: [destinationA, destinationB],
+          travelMode: 'TRANSIT',
+          transitOptions: {
+            arrivalTime: new Date(arriveAt),
+            routingPreference: 'FEWER_TRANSFERS'
+          },
+          unitSystem: google.maps.UnitSystem.METRIC,
+          avoidHighways: false,
+          avoidTolls: false
+        }, (response, status) => {
+          if (status !== 'OK') {
+            alert('Error was: ' + status)
+          } else {
+            this.dailyArrivals.push({
+              text: response.rows[1].elements[1].duration.text,
+              value: response.rows[1].elements[1].duration.value
+            })
           }
-          this.toWork = {
-            text: response.rows[1].elements[1].duration.text,
-            value: response.rows[1].elements[1].duration.value
-          }
+        })
+      })
 
-          // for (let i = 0; i < originList.length; i++) {
-          //   let results = response.rows[i].elements
-          //   geocoder.geocode({'address': originList[i]},
-          //       showGeocodedAddressOnMap(false))
-          //   for (let j = 0; j < results.length; j++) {
-          //     geocoder.geocode({'address': destinationList[j]},
-          //         showGeocodedAddressOnMap(true))
-          //     outputDiv.innerHTML += originList[i] + ' to ' + destinationList[j] +
-          //         ': ' + results[j].distance.text + ' in ' +
-          //         results[j].duration.text + '<br>'
-          //   }
-          // }
-        }
+      this.workDays.forEach((workDay) => {
+        let day = moment().isoWeekday(workDay)
+        let departAt = new Date(moment.utc(day).set({'hour': 17, 'minute': 15}).format())
+        let service = new google.maps.DistanceMatrixService
+        service.getDistanceMatrix({
+          origins: [origin1, origin2],
+          destinations: [destinationA, destinationB],
+          travelMode: 'TRANSIT',
+          transitOptions: {
+            departureTime: new Date(departAt),
+            routingPreference: 'FEWER_TRANSFERS'
+          },
+          unitSystem: google.maps.UnitSystem.METRIC,
+          avoidHighways: false,
+          avoidTolls: false
+        }, (response, status) => {
+          if (status !== 'OK') {
+            alert('Error was: ' + status)
+          } else {
+            this.dailyDepartures.push({
+              text: response.rows[1].elements[1].duration.text,
+              value: response.rows[1].elements[1].duration.value
+            })
+          }
+        })
       })
     }
-
-    // const deleteMarkers = (markersArray) => {
-    //   for (let i = 0; i < markersArray.length; i++) {
-    //     markersArray[i].setMap(null)
-    //   }
-    //   markersArray = []
-    // }
     initializeMap()
   }
 }
