@@ -2,6 +2,7 @@
   <div class="get-directions">
     <div class="padding">
       <p class="title is-3">Work Commuting</p>
+      <img v-if="loading" src="https://i.imgur.com/JfPpwOA.gif">
       Please select your destination:
       <div class="select is-small is-rounded is-primary">
         <select v-model="travelTo" id="get-destination">
@@ -48,7 +49,8 @@ export default {
       mapName: this.name + '-map',
       workAddress: 'Kortrijksesteenweg 181, 9000 Gent',
       travelTo: 'WORK',
-      travelMode: 'TRANSIT'
+      travelMode: 'TRANSIT',
+      loading: true
     }
   },
   computed: {
@@ -122,6 +124,8 @@ export default {
         }
         document.getElementById('travel-mode').addEventListener('change', onChangeHandler)
         document.getElementById('get-destination').addEventListener('change', onChangeHandler)
+
+        this.loading = false
       }
       initMap()
     // })

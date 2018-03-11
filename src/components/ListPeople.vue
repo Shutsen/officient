@@ -19,44 +19,34 @@
         </tr>
       </tbody>
     </table>
+    <br>
+    <img v-if="loading" src="https://i.imgur.com/JfPpwOA.gif">
   </div>
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 export default {
   name: 'ListPeople',
   data () {
     return {
-      people: []
+      people: [],
+      loading: true
     }
   },
   mounted () {
     const getPeopleList = async () => {
       try {
-        // TODO 1: solve the authorization
-        // TODO 2: make token dynamic and extract it for security
-
-        // const token = 'bd6ad762f364ef73642631ee5224859372a6e8f7'
-        // const response = await axios({ method: 'get', url: `https://api.officient.io/1.0/people/list`, headers: { 'Authorization': 'Bearer ' + token } })
-
-        // postman does hit the api when passing the Bearer token into the authorization header:
-        const postmanResponse = {'data': [{ 'id': 3061, 'name': 'Charlize Theron', 'email': 'charlizetheron@example.com', 'role_name': 'Geerts Assistant' },
-          { 'id': 3060, 'name': 'David Gilmour', 'email': 'davidgilmour@example.com', 'role_name': 'Sales Manager' },
-          { 'id': 3059, 'name': 'Barry White', 'email': 'barrywhite@example.com', 'role_name': 'Accountant' },
-          // { 'id': 3054, 'name': 'Geert Van Campenhout', 'email': 'vancampenhoutgeert@gmail.com', 'role_name': 'Front End Developer' },
-          // { 'id': 3054, 'name': 'Geert Van Campenhout', 'email': 'vancampenhoutgeert@gmail.com', 'role_name': 'Front End Developer' },
-          // { 'id': 3054, 'name': 'Geert Van Campenhout', 'email': 'vancampenhoutgeert@gmail.com', 'role_name': 'Front End Developer' },
-          // { 'id': 3054, 'name': 'Geert Van Campenhout', 'email': 'vancampenhoutgeert@gmail.com', 'role_name': 'Front End Developer' },
-          // { 'id': 3054, 'name': 'Geert Van Campenhout', 'email': 'vancampenhoutgeert@gmail.com', 'role_name': 'Front End Developer' },
-          // { 'id': 3054, 'name': 'Geert Van Campenhout', 'email': 'vancampenhoutgeert@gmail.com', 'role_name': 'Front End Developer' },
-          // { 'id': 3054, 'name': 'Geert Van Campenhout', 'email': 'vancampenhoutgeert@gmail.com', 'role_name': 'Front End Developer' },
-          // { 'id': 3054, 'name': 'Geert Van Campenhout', 'email': 'vancampenhoutgeert@gmail.com', 'role_name': 'Front End Developer' },
-          { 'id': 3054, 'name': 'Geert Van Campenhout', 'email': 'vancampenhoutgeert@gmail.com', 'role_name': 'Front End Developer' }],
-        'total_record_count': 4 }
-        this.people = postmanResponse.data
+        // TODO 1: make token dynamic and extract it for security
+        const token = 'dc082b83a92ac24783dd038569b5fd4a7144f0c3'
+        const proxyurl = 'https://cors-anywhere.herokuapp.com/'
+        const target = 'https://api.officient.io/1.0/people/list'
+        const url = proxyurl + target
+        const response = await axios({ method: 'get', url: url, headers: {'Authorization': 'Bearer ' + token} })
+        this.people = response.data.data
+        this.loading = false
       } catch (e) {
-        console.log(e)
+        console.log(`Can't access the response. Blocked by browser`)
       }
     }
     getPeopleList()

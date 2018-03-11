@@ -2,6 +2,7 @@
   <div class="person-details">
     <div class="container">
       <p class="title is-3">Details Employee</p>
+      <img v-if="loading" src="https://i.imgur.com/JfPpwOA.gif">
       <div class="tile is-ancestor">
         <div class="tile is-vertical is-8">
           <div class="tile">
@@ -65,7 +66,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 import TimeEngagement from './TimeEngagement'
 import GetDirections from './GetDirections'
 import DistanceMatrix from './DistanceMatrix'
@@ -88,7 +89,8 @@ export default {
   data () {
     return {
       personAddress: '',
-      personDetails: {}
+      personDetails: {},
+      loading: true
     }
   },
   filters: {
@@ -105,55 +107,16 @@ export default {
   created () {
     const getPersonDetails = async (id) => {
       try {
-        // TODO 1: solve the authorization
-        // TODO 2: make token dynamic and extract it for security
-
-        // const token = 'bd6ad762f364ef73642631ee5224859372a6e8f7'
-        // const response = await axios({ method: 'get', url: `https://api.officient.io/1.0/people/${id}/detail`, headers: { 'Authorization': 'Bearer ' + token } })
-        // OR
-        // const response = await axios.get(`https://api.officient.io/1.0/people/${id}/detail`, {headers: {'Authorization': `Bearer ${token}`}})
-
-        // postman does hit the api when passing the Bearer token into the authorization header:
-        const postmanResponse = {
-          'data': {
-            'id': 3054,
-            'deleted': 0,
-            'name': 'Geert Van Campenhout',
-            'email': 'vancampenhoutgeert@gmail.com',
-            'personal_email': '',
-            'social_security_nr': '',
-            'birthdate': '',
-            'avatar': 'https://www.gravatar.com/avatar/0f853835235e953443da153de79ca631?d=404',
-            'phone': '',
-            'civil_state': '',
-            'nationality_country_code': '',
-            'gender': '',
-            'bank_account_iban': '',
-            'emergency_contact': {
-              'name': '',
-              'relation': '',
-              'phone': ''
-            },
-            'address': {
-              'line_1': 'Acaciastraat 82',
-              'line_2': '',
-              'zipcode': '3500',
-              'city': 'Hasselt',
-              'state': '',
-              'country_code': 'BE'
-            },
-            'team': null,
-            'current_role': {
-              'name': 'Freelancer',
-              'start_date': '2018-03-01'
-            },
-            'current_reports_to': null,
-            'custom_fields': []
-          }
-        }
-        this.personDetails = postmanResponse.data
+        // TODO 1: make token dynamic and extract it for security
+        const token = 'dc082b83a92ac24783dd038569b5fd4a7144f0c3'
+        const proxyurl = 'https://cors-anywhere.herokuapp.com/'
+        const target = `https://api.officient.io/1.0/people/${id}/detail`
+        const url = proxyurl + target
+        const response = await axios({ method: 'get', url: url, headers: { 'Authorization': 'Bearer ' + token } })
+        this.personDetails = response.data.data
+        this.loading = false
       } catch (e) {
-        console.log(e)
+        console.log(`Can't access the response. Blocked by browser`)
       }
     }
     getPersonDetails(this.id)
