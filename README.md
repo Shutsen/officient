@@ -8,7 +8,7 @@
 # install dependencies
 npm install
 
---- IMPORTANT: BEFORE running the dev server, get your temporary token via your officient account and REPLACE in following files:
+# IMPORTANT: BEFORE running the dev server, get your temporary token via your officient account and REPLACE in following files:
 src/components/ListPeople.vue
 src/components/ListPeopleDetail.vue
 
