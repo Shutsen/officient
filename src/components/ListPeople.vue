@@ -13,7 +13,7 @@
       <tbody>
         <tr v-for="person in people" :key="person.id">
           <td>{{person.name}}</td>
-          <td>{{person.email}}</td>
+          <td><span class="icon"><i class="fas fa-envelope"></i></span><a :href="`mailto:${person.email}`">{{person.email}}</a></td>
           <td>{{person.role_name}}</td>
           <td><router-link :to="{name: 'ListPeopleDetail', params: {id: person.id}}">Show me</router-link></td>
         </tr>
@@ -38,12 +38,15 @@ export default {
     const getPeopleList = async () => {
       try {
         // TODO 1: make token dynamic and extract it for security
-        const token = 'dc082b83a92ac24783dd038569b5fd4a7144f0c3'
+        // ADD TEMPORARY TOKEN!
+        // Get the temporary token via your officient account and REPLACE below:
+        const token = 'a5d347e9470f86ee2dcbc36c99f2f45c8d8d6950'
         const proxyurl = 'https://cors-anywhere.herokuapp.com/'
         const target = 'https://api.officient.io/1.0/people/list'
         const url = proxyurl + target
         const response = await axios({ method: 'get', url: url, headers: {'Authorization': 'Bearer ' + token} })
         this.people = response.data.data
+        // when API request is complete - hide the loading gif
         this.loading = false
       } catch (e) {
         console.log(`Can't access the response. Blocked by browser`)
@@ -77,6 +80,10 @@ export default {
 
   tr:nth-child(even) {
       background-color: #dddddd;
+  }
+
+  span.icon {
+    margin-right: 5px;
   }
 
   a {

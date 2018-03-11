@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   props: {
     id: {
@@ -49,41 +50,14 @@ export default {
   created () {
     // eslint-disable-next-line
     const getWageDetails = async (id) => {
-      // const token = 'bd6ad762f364ef73642631ee5224859372a6e8f7'
-      // const response = await axios.get(`https://api.officient.io/1.0/wages/${id}/current`, {headers: {'Authorization': `Bearer ${token}`}})
-      const postmanResponse = {
-        'data': {
-          'start_date': '2018-03-01',
-          'estimated_monthly_total': 73000,
-          'currency': 'EUR',
-          'type': 'employee_paid_monthly',
-          'rate': 50000,
-          'registration_country_code': 'BE',
-          'estimated_monthly_cost': {
-            'base_components': {
-              'base_rate': 50000,
-              'social_contributions': 15000,
-              'end_of_year_bonus': 4166.67,
-              'retirement_plan': 0,
-              'holiday_pay': 3833.33,
-              'hospitalization_insurance': 0,
-              'net_allowance': 0,
-              'car': 0
-            },
-            'custom_components': []
-          },
-          'weekly_time_engagement_minutes': {
-            'monday': 456,
-            'tuesday': 456,
-            'wednesday': 456,
-            'thursday': 456,
-            'friday': 456,
-            'saturday': 0,
-            'sunday': 0
-          }
-        }
-      }
-      this.wageDetails = postmanResponse.data
+      // ADD TEMPORARY TOKEN!
+      // Get the temporary token via your officient account and REPLACE below:
+      const token = 'a5d347e9470f86ee2dcbc36c99f2f45c8d8d6950'
+      const proxyurl = 'https://cors-anywhere.herokuapp.com/'
+      const target = `https://api.officient.io/1.0/wages/${id}/current`
+      const url = proxyurl + target
+      const response = await axios({ method: 'get', url: url, headers: {'Authorization': 'Bearer ' + token} })
+      this.wageDetails = response.data.data
     }
     getWageDetails(this.id)
   }

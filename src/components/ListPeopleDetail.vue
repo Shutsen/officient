@@ -38,7 +38,7 @@
                   <li><u>Education:</u> MBA in Entrepreneurship and Innovation. Selfstudy code</li>
                   <li><u>Work:</u> Part-time Developer, part-time Assistant Manager at Lekker Limburgs</li>
                   <li><u>Prefers:</u> A Full-time Developer job and to work in a team again</li>
-                  <li><u>Loves:</u> A challenge, boardgames, football, travel and sunflower seeds</li>
+                  <li><u>Loves:</u> A challenge, boardgames, football, travel, climbing trees and sunflower seeds</li>
                   <li><u>Keywords:</u> Teamplayer, self-motivated, enthusiastic, eager to learn</li>
                 </ul>
               </article>
@@ -71,7 +71,6 @@ import TimeEngagement from './TimeEngagement'
 import GetDirections from './GetDirections'
 import DistanceMatrix from './DistanceMatrix'
 import ListSkills from './ListSkills'
-import SubLevel from './SubLevel'
 export default {
   name: 'ListPeopleDetail',
   props: {
@@ -83,8 +82,7 @@ export default {
     TimeEngagement,
     GetDirections,
     DistanceMatrix,
-    ListSkills,
-    SubLevel
+    ListSkills
   },
   data () {
     return {
@@ -108,12 +106,15 @@ export default {
     const getPersonDetails = async (id) => {
       try {
         // TODO 1: make token dynamic and extract it for security
-        const token = 'dc082b83a92ac24783dd038569b5fd4a7144f0c3'
+        // ADD TEMPORARY TOKEN!
+        // Get the temporary token via your officient account and REPLACE below:
+        const token = 'a5d347e9470f86ee2dcbc36c99f2f45c8d8d6950'
         const proxyurl = 'https://cors-anywhere.herokuapp.com/'
         const target = `https://api.officient.io/1.0/people/${id}/detail`
         const url = proxyurl + target
         const response = await axios({ method: 'get', url: url, headers: { 'Authorization': 'Bearer ' + token } })
         this.personDetails = response.data.data
+        // when API request is complete - hide the loading gif
         this.loading = false
       } catch (e) {
         console.log(`Can't access the response. Blocked by browser`)

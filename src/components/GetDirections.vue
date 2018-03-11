@@ -82,8 +82,6 @@ export default {
     }
   },
   mounted () {
-    // TODO 1: add select functionality to either go to Work or to return Home
-    // TODO 2: change departureTime to arrivalTime for each day of the week
       const calculateAndDisplayRoute = (directionsService, directionsDisplay) => {
         directionsService.route({
           origin: this.getTravelDirection.from,
@@ -124,7 +122,7 @@ export default {
         }
         document.getElementById('travel-mode').addEventListener('change', onChangeHandler)
         document.getElementById('get-destination').addEventListener('change', onChangeHandler)
-
+        // when API request is complete - hide the loading gif
         this.loading = false
       }
       initMap()
