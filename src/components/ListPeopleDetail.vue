@@ -2,66 +2,68 @@
   <div class="person-details">
     <div class="container">
       <p class="title is-3">Details Employee</p>
-      <img v-if="loading" src="https://i.imgur.com/JfPpwOA.gif">
-      <div class="tile is-ancestor">
-        <div class="tile is-vertical is-8">
-          <div class="tile">
-            <div class="tile is-parent is-vertical has-text-left">
-              <article class="tile is-child notification">
-                <article class="media">
-                  <figure class="media-left">
-                    <p class="image is-64x64">
-                      <img :src="personDetails.avatar">
-                    </p>
-                  </figure>
-                  <div class="media-content">
-                    <div class="content">
-                      <p class="title is-5">{{personDetails.name}}</p>
-                      <p>Current Role: {{personDetails.current_role.name}}</p>
-                       <p>With us since: {{personDetails.current_role.start_date}}</p>
+      <div v-if="isLoading"><img class="loading" src="https://i.imgur.com/JfPpwOA.gif"></div>
+      <div v-if="!isLoading">
+        <div class="tile is-ancestor">
+          <div class="tile is-vertical is-8">
+            <div class="tile">
+              <div class="tile is-parent is-vertical has-text-left">
+                <article class="tile is-child notification">
+                  <article class="media">
+                    <figure class="media-left">
+                      <p class="image is-64x64">
+                        <img :src="personDetails.avatar">
+                      </p>
+                    </figure>
+                    <div class="media-content">
+                      <div class="content">
+                        <p class="title is-5">{{personDetails.name}}</p>
+                        <p>Current Role: {{personDetails.current_role.name}}</p>
+                        <p>With us since: {{personDetails.current_role.start_date}}</p>
+                      </div>
                     </div>
-                  </div>
+                  </article>
                 </article>
-              </article>
-              <article class="tile is-child notification has-text-left">
-                <p class="title is-5">Contact Information</p>
-                <p><span class="icon"><i class="fas fa-envelope"></i></span><a :href="`mailto:${personDetails.email}`">{{personDetails.email}}</a></p>
-                <p><span class="icon"><i class="fas fa-home"></i></span>{{personDetails.address.line_1 | lowercase}}</p>
-                <p><span class="icon"><i class="fas fa-info-circle"></i></span>{{personDetails.address.zipcode}} {{personDetails.address.city}}, Belgium</p>
-              </article>
+                <article class="contact tile is-child notification has-text-left">
+                  <p class="title is-5">Contact Information</p>
+                  <p><span class="icon"><i class="fas fa-envelope"></i></span><a :href="`mailto:${personDetails.email}`">{{personDetails.email}}</a></p>
+                  <p><span class="icon"><i class="fas fa-home"></i></span>{{personDetails.address.line_1 | lowercase}}</p>
+                  <p><span class="icon"><i class="fas fa-info-circle"></i></span>{{personDetails.address.zipcode}} {{personDetails.address.city}}, Belgium</p>
+                </article>
+              </div>
+              <div class="tile is-parent has-text-left">
+                <article class="tile is-child notification">
+                  <p class="title is-5">About</p>
+                  <ul>
+                    <li><u>Born:</u> Yes. 09/08/1986 in Hasselt</li>
+                    <li><u>Education:</u> MBA in Entrepreneurship and Innovation. Selfstudy code</li>
+                    <li><u>Work:</u> Part-time Developer, part-time Assistant Manager at Lekker Limburgs</li>
+                    <li><u>Prefers:</u> A Full-time Developer job and to work in a team again</li>
+                    <li><u>Loves:</u> A challenge, boardgames, football, travel, climbing trees and sunflower seeds</li>
+                    <li><u>Keywords:</u> Teamplayer, self-motivated, enthusiastic, eager to learn</li>
+                  </ul>
+                </article>
+              </div>
             </div>
             <div class="tile is-parent has-text-left">
               <article class="tile is-child notification">
-                <p class="title is-5">About</p>
-                <ul>
-                  <li><u>Born:</u> Yes. 09/08/1986 in Hasselt</li>
-                  <li><u>Education:</u> MBA in Entrepreneurship and Innovation. Selfstudy code</li>
-                  <li><u>Work:</u> Part-time Developer, part-time Assistant Manager at Lekker Limburgs</li>
-                  <li><u>Prefers:</u> A Full-time Developer job and to work in a team again</li>
-                  <li><u>Loves:</u> A challenge, boardgames, football, travel, climbing trees and sunflower seeds</li>
-                  <li><u>Keywords:</u> Teamplayer, self-motivated, enthusiastic, eager to learn</li>
-                </ul>
+                <list-skills></list-skills>
               </article>
             </div>
           </div>
           <div class="tile is-parent has-text-left">
             <article class="tile is-child notification">
-              <list-skills></list-skills>
+              <div class="content">
+                <p class="title is-5">Daily Time Engagement</p>
+                <time-engagement :id="this.id"></time-engagement>
+              </div>
             </article>
           </div>
         </div>
-        <div class="tile is-parent has-text-left">
-          <article class="tile is-child notification">
-            <div class="content">
-              <p class="title is-5">Daily Time Engagement</p>
-              <time-engagement :id="this.id"></time-engagement>
-            </div>
-          </article>
-        </div>
+        <get-directions name="directions" :homeAddress="homeAddress"></get-directions>
+        <distance-matrix :homeAddress="homeAddress"></distance-matrix>
       </div>
     </div>
-    <get-directions name="directions" :homeAddress="homeAddress"></get-directions>
-    <distance-matrix :homeAddress="homeAddress"></distance-matrix>
   </div>
 </template>
 
@@ -86,9 +88,9 @@ export default {
   },
   data () {
     return {
-      personAddress: '',
+      homeAddress: '',
       personDetails: {},
-      loading: true
+      isLoading: true
     }
   },
   filters: {
@@ -97,25 +99,22 @@ export default {
       return value.toLowerCase()
     }
   },
-  computed: {
-    homeAddress () {
-      return `${this.personDetails.address.line_1}, ${this.personDetails.address.zipcode} ${this.personDetails.address.city}`
-    }
-  },
   created () {
     const getPersonDetails = async (id) => {
       try {
         // TODO 1: make token dynamic and extract it for security
         // ADD TEMPORARY TOKEN!
         // Get the temporary token via your officient account and REPLACE below:
-        const token = 'a5d347e9470f86ee2dcbc36c99f2f45c8d8d6950'
+        const token = 'c7f08dde5d74d600ff61db20897dab486b844295'
+        // proxyurl: to enable cross-origin requests to anywhere (the server would not allow access bc of authorization otherwise)
         const proxyurl = 'https://cors-anywhere.herokuapp.com/'
         const target = `https://api.officient.io/1.0/people/${id}/detail`
         const url = proxyurl + target
         const response = await axios({ method: 'get', url: url, headers: { 'Authorization': 'Bearer ' + token } })
         this.personDetails = response.data.data
+        this.homeAddress = `${this.personDetails.address.line_1}, ${this.personDetails.address.zipcode} ${this.personDetails.address.city}`
         // when API request is complete - hide the loading gif
-        this.loading = false
+        this.isLoading = false
       } catch (e) {
         console.log(`Can't access the response. Blocked by browser`)
       }

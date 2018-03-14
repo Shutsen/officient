@@ -20,7 +20,7 @@
       </tbody>
     </table>
     <br>
-    <img v-if="loading" src="https://i.imgur.com/JfPpwOA.gif">
+    <img class="loading" v-if="isLoading" src="https://i.imgur.com/JfPpwOA.gif">
   </div>
 </template>
 
@@ -31,7 +31,7 @@ export default {
   data () {
     return {
       people: [],
-      loading: true
+      isLoading: true
     }
   },
   mounted () {
@@ -40,14 +40,14 @@ export default {
         // TODO 1: make token dynamic and extract it for security
         // ADD TEMPORARY TOKEN!
         // Get the temporary token via your officient account and REPLACE below:
-        const token = 'a5d347e9470f86ee2dcbc36c99f2f45c8d8d6950'
+        const token = 'c7f08dde5d74d600ff61db20897dab486b844295'
         const proxyurl = 'https://cors-anywhere.herokuapp.com/'
         const target = 'https://api.officient.io/1.0/people/list'
         const url = proxyurl + target
         const response = await axios({ method: 'get', url: url, headers: {'Authorization': 'Bearer ' + token} })
         this.people = response.data.data
         // when API request is complete - hide the loading gif
-        this.loading = false
+        this.isLoading = false
       } catch (e) {
         console.log(`Can't access the response. Blocked by browser`)
       }

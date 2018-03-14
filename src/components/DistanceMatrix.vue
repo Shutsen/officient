@@ -1,46 +1,48 @@
 <template>
  <div>
-    <div class="container padding">
-      <p class="title is-3">Weekly Travel Time</p>
-      <img v-if="loading" src="https://i.imgur.com/JfPpwOA.gif">
-      <table>
-        <tr>
-          <th>Travel Time</th>
-          <th>Monday</th>
-          <th>Tuesday</th>
-          <th>Wednesday</th>
-          <th>Thursday</th>
-          <th>Friday</th>
-          <th>Total per week</th>
-        </tr>
-        <tr class="dailyArrivals">
-          <td class="tooltip is-tooltip-primary is-tooltip-right" data-tooltip="Arriving at 08:45">To Work</td>
-          <td>{{dailyArrivals[0].text}}</td>
-          <td>{{dailyArrivals[1].text}}</td>
-          <td>{{dailyArrivals[2].text}}</td>
-          <td>{{dailyArrivals[3].text}}</td>
-          <td>{{dailyArrivals[4].text}}</td>
-          <td><strong>{{totalPerWeekWork}}</strong></td>
-        </tr>
-        <tr class="dailyDepartures">
-          <td class="tooltip is-tooltip-primary is-tooltip-right" data-tooltip="Leaving at 17:15">To Home</td>
-          <td>{{dailyDepartures[0].text}}</td>
-          <td>{{dailyDepartures[1].text}}</td>
-          <td>{{dailyDepartures[2].text}}</td>
-          <td>{{dailyDepartures[3].text}}</td>
-          <td>{{dailyDepartures[4].text}}</td>
-          <td><strong>{{totalPerWeekHome}}</strong></td>
-        </tr>
-        <tr class="totalPerDay">
-          <td><strong>Total per day</strong></td>
-          <td><strong>{{totalPerDay[0]}}</strong></td>
-          <td><strong>{{totalPerDay[1]}}</strong></td>
-          <td><strong>{{totalPerDay[2]}}</strong></td>
-          <td><strong>{{totalPerDay[3]}}</strong></td>
-          <td><strong>{{totalPerDay[4]}}</strong></td>
-          <td><strong>{{grandTotal}}</strong></td>
-        </tr>
-      </table>
+    <div v-if="isLoading"><img class="loading" src="https://i.imgur.com/JfPpwOA.gif"></div>
+    <div v-if="!isLoading">
+      <div class="container padding">
+        <p class="title is-3">Weekly Travel Time</p>
+        <table>
+          <tr>
+            <th>Travel Time</th>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Total per week</th>
+          </tr>
+          <tr class="dailyArrivals">
+            <td class="tooltip is-tooltip-primary is-tooltip-right" data-tooltip="Arriving at 08:45">To Work</td>
+            <td>{{dailyArrivals[0].text}}</td>
+            <td>{{dailyArrivals[1].text}}</td>
+            <td>{{dailyArrivals[2].text}}</td>
+            <td>{{dailyArrivals[3].text}}</td>
+            <td>{{dailyArrivals[4].text}}</td>
+            <td><strong>{{totalPerWeekWork}}</strong></td>
+          </tr>
+          <tr class="dailyDepartures">
+            <td class="tooltip is-tooltip-primary is-tooltip-right" data-tooltip="Leaving at 17:15">To Home</td>
+            <td>{{dailyDepartures[0].text}}</td>
+            <td>{{dailyDepartures[1].text}}</td>
+            <td>{{dailyDepartures[2].text}}</td>
+            <td>{{dailyDepartures[3].text}}</td>
+            <td>{{dailyDepartures[4].text}}</td>
+            <td><strong>{{totalPerWeekHome}}</strong></td>
+          </tr>
+          <tr class="totalPerDay">
+            <td><strong>Total per day</strong></td>
+            <td><strong>{{totalPerDay[0]}}</strong></td>
+            <td><strong>{{totalPerDay[1]}}</strong></td>
+            <td><strong>{{totalPerDay[2]}}</strong></td>
+            <td><strong>{{totalPerDay[3]}}</strong></td>
+            <td><strong>{{totalPerDay[4]}}</strong></td>
+            <td><strong>{{grandTotal}}</strong></td>
+          </tr>
+        </table>
+      </div>
     </div>
  </div>
 </template>
@@ -55,7 +57,7 @@ export default {
       workDays: ['Monday', 'Tuesday', 'WednesDay', 'Thursday', 'Friday'],
       dailyArrivals: [],
       dailyDepartures: [],
-      loading: true
+      isLoading: true
     }
   },
   computed: {
@@ -67,7 +69,6 @@ export default {
       let hours = Math.floor(total / 3600)        
       let mins = Math.floor(total % 3600 / 60)
       return `${hours} hours ${mins} mins` 
-      
     },
     totalPerWeekHome () {
       let total = 0
@@ -76,7 +77,7 @@ export default {
       }
       let hours = Math.floor(total / 3600)        
       let mins = Math.floor(total % 3600 / 60)
-      return `${hours} hours ${mins} mins` 
+      return `${hours} hours ${mins} mins`
     },
     totalPerDay () {
       let totalPerDay = []
@@ -131,7 +132,6 @@ export default {
               text: response.rows[1].elements[1].duration.text,
               value: response.rows[1].elements[1].duration.value
             })
-            this.loading = false
           }
         })
       })
@@ -155,7 +155,6 @@ export default {
           if (status !== 'OK') {
             alert('Error was: ' + status)
           } else {
-            console.log('DEPARTURES', response)
             this.dailyDepartures.push({
               text: response.rows[0].elements[0].duration.text,
               value: response.rows[0].elements[0].duration.value
@@ -163,6 +162,7 @@ export default {
           }
         })
       })
+      this.isLoading = false
     }
     initializeMap()
   }

@@ -20,7 +20,6 @@ describe('WelcomeHome.vue', () => {
     newGuest.trigger('input')
 
     expect(wrapper.contains('.welcome-msg')).toBe(true)
-
     expect(wrapper.find('.welcome-msg').text()).toMatch('Well, hello Geert! It\'s so nice to have you here!')
   })
 
@@ -28,7 +27,6 @@ describe('WelcomeHome.vue', () => {
     wrapper.setData({
       msg: 'Learn something new, every single day!'
     })
-
     expect(wrapper.find('.catch-line').text()).toMatch('Learn something new, every single day!')
   })
 })

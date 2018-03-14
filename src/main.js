@@ -3,8 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import AsyncComputed from 'vue-async-computed'
 
 Vue.config.productionTip = false
+Vue.use(AsyncComputed)
 
 window.Event = new Vue()
 

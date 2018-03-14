@@ -34,12 +34,6 @@
       </div>
       <div class="control">
         <div class="tags has-addons">
-          <span class="tag is-dark">testing</span>
-          <span class="tag is-primary">yes</span>
-        </div>
-      </div>
-      <div class="control">
-        <div class="tags has-addons">
           <span class="tag is-dark">github</span>
           <span class="tag is-primary">yes</span>
         </div>
@@ -48,6 +42,12 @@
         <div class="tags has-addons">
           <span class="tag is-dark">terminal</span>
           <span class="tag is-primary">yes</span>
+        </div>
+      </div>
+      <div class="control">
+        <div class="tags has-addons">
+          <span class="tag is-dark">testing</span>
+          <span class="tag is-warning">some xp</span>
         </div>
       </div>
       <div class="control">

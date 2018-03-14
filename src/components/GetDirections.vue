@@ -2,7 +2,7 @@
   <div class="get-directions">
     <div class="padding">
       <p class="title is-3">Work Commuting</p>
-      <img v-if="loading" src="https://i.imgur.com/JfPpwOA.gif">
+      <img class="loading" v-if="loading" src="https://i.imgur.com/JfPpwOA.gif">
       Please select your destination:
       <div class="select is-small is-rounded is-primary">
         <select v-model="travelTo" id="get-destination">
@@ -95,7 +95,6 @@ export default {
         }, (response, status) => {
           if (status === 'OK') {
             directionsDisplay.setDirections(response)
-            console.log(response)
           } else {
             window.alert('Directions request failed due to ' + status)
           }
