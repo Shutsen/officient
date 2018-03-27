@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import token from '../token'
 import axios from 'axios'
 export default {
   props: {
@@ -54,9 +55,7 @@ export default {
   created () {
     // eslint-disable-next-line
     const getWageDetails = async (id) => {
-      // ADD TEMPORARY TOKEN!
-      // Get the temporary token via your officient account and REPLACE below:
-      const token = 'c7f08dde5d74d600ff61db20897dab486b844295'
+      // proxyurl: to enable cross-origin requests to anywhere (the server would not allow access bc of authorization otherwise)
       const proxyurl = 'https://cors-anywhere.herokuapp.com/'
       const target = `https://api.officient.io/1.0/wages/${id}/current`
       const url = proxyurl + target

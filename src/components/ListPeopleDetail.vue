@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import token from '../token'
 import axios from 'axios'
 import TimeEngagement from './TimeEngagement'
 import GetDirections from './GetDirections'
@@ -102,10 +103,6 @@ export default {
   created () {
     const getPersonDetails = async (id) => {
       try {
-        // TODO 1: make token dynamic and extract it for security
-        // ADD TEMPORARY TOKEN!
-        // Get the temporary token via your officient account and REPLACE below:
-        const token = 'c7f08dde5d74d600ff61db20897dab486b844295'
         // proxyurl: to enable cross-origin requests to anywhere (the server would not allow access bc of authorization otherwise)
         const proxyurl = 'https://cors-anywhere.herokuapp.com/'
         const target = `https://api.officient.io/1.0/people/${id}/detail`

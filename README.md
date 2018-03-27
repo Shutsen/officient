@@ -1,6 +1,12 @@
 # officient
 
-> A Vue.js project
+> A Vue.js coding test - clone the repo
+
+# Create an account on yourname.officient.io
+get a temporary token in the Developers section and use this in './src/token.js'
+
+# In the people tab, fill out random data for a few people in your Officient account.
+this should at least include the personal information like email, a home addresses, a wage and a role
 
 ## Build Setup
 
@@ -8,12 +14,7 @@
 # install dependencies
 npm install
 
-# IMPORTANT: BEFORE running the dev server, get your temporary token via your officient account and REPLACE in following files:
-src/components/ListPeople.vue
-src/components/ListPeopleDetail.vue
-src/components/TimeEngagement.vue
-
-# serve with hot reload at localhost:8080
+# run the app and serve with hot reload at localhost:8080
 npm run dev
 
 # build for production with minification
